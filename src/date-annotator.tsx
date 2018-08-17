@@ -58,7 +58,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
             date: prevState.date,
             offsetDays: prevState.offsetDays
         }, nextProps);
-        nextState.offsetDays = parseInt(nextState.offsetDays);
+        nextState.offsetDays = parseInt(nextState.offsetDays || '0');
         // work-around for low date ranges not being support
         let offsetDate = nextState.date.year > 1000
             ? nextState.date.addDays(nextState.offsetDays)
@@ -71,6 +71,8 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
             prevState.calendar != newState.calendar) {
             this.emitState(Object.assign(prevState, newState));
         }
+        // make sure the updated value is displayed
+        newState.offsetDays = newState.offsetDays.toString()
         return newState;
     }
 
