@@ -24,7 +24,7 @@ import { DateAnnotatorComponent } from 'historical-dates-ui'
 class Example extends React.Component {
   render () {
     return (
-      <DateAnnotatorComponent text="ad XIV kal feb MCMLXXXVII" onChange={function() {}} />
+      <DateAnnotatorComponent text="ad III kal mar MCMLXXXVII" onChange={function() {}} />
     )
   }
 }

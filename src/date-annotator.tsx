@@ -12,6 +12,7 @@ export type DateAnnotatorProps = {
 
 export type DateAnnotatorState = {
     calendar: 'gregorian' | 'julian';
+    text: string,
     type: undefined | 'plain' | 'holiday' | 'roman',
     date: HistoricalDate,
     holiday: HolidayDay,
@@ -41,6 +42,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         this.state = {
             calendar: 'gregorian',
             date: historicalDate,
+            text: props.text,
             type: undefined,
             offsetDays: 0,
             holiday: 'easter',
@@ -50,27 +52,31 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         };
     }
 
+    private deriveState(prevState: DateAnnotatorState, nextProps: any) {
+        let nextState = Object.assign({
+            calendar: prevState.calendar,
+            date: prevState.date,
+            offsetDays: prevState.offsetDays
+        }, nextProps);
+        nextState.offsetDays = parseInt(nextState.offsetDays);
+        // work-around for low date ranges not being support
+        let offsetDate = nextState.date.year > 1000
+            ? nextState.date.addDays(nextState.offsetDays)
+            : nextState.date;
+        let newState = Object.assign({}, nextState, {
+            gregorianDate: offsetDate.toGregorian(),
+            julianDate: offsetDate.toJulian()
+        });
+        if (!prevState.gregorianDate.equals(newState.gregorianDate) ||
+            prevState.calendar != newState.calendar) {
+            this.emitState(Object.assign(prevState, newState));
+        }
+        return newState;
+    }
+
     private setDerivedState(nextProps: any) {
         this.setState((prevState) => {
-            let nextState = Object.assign({
-                calendar: prevState.calendar,
-                date: prevState.date,
-                offsetDays: prevState.offsetDays
-            }, nextProps);
-            nextState.offsetDays = parseInt(nextState.offsetDays);
-            // work-around for low date ranges not being support
-            let offsetDate = nextState.date.year > 1000
-                ? nextState.date.addDays(nextState.offsetDays)
-                : nextState.date;
-            let newState = Object.assign({}, nextState, {
-                gregorianDate: offsetDate.toGregorian(),
-                julianDate: offsetDate.toJulian()
-            });
-            if (!prevState.gregorianDate.equals(newState.gregorianDate) ||
-                prevState.calendar != newState.calendar) {
-                this.emitState(Object.assign(prevState, newState));
-            }
-            return newState;
+            return this.deriveState(prevState, nextProps);
         });
     }
 
@@ -109,19 +115,24 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
     }
 
     componentWillReceiveProps(nextProps: DateAnnotatorProps) {
-        try {
-            let roman = RomanDate.fromString(nextProps.text, this.state.calendar);
-            nextProps = Object.assign({}, nextProps, {
-                roman,
-                date: roman.toDate(),
-                type: 'roman'
-            });
-        } catch (exception) {
-            if (!(exception instanceof InvalidDateException)) {
-                throw exception;
+        this.setState((prevState) => {
+            if (prevState.text != nextProps.text) {
+                try {
+                    let roman = RomanDate.fromString(nextProps.text, this.state.calendar);
+                    nextProps = Object.assign({}, nextProps, {
+                        roman,
+                        date: roman.toDate(),
+                        type: 'roman'
+                    });
+                } catch (exception) {
+                    if (!(exception instanceof InvalidDateException)) {
+                        throw exception;
+                    }
+                }
             }
-        }
-        this.setDerivedState(nextProps);
+
+            return this.deriveState(prevState, nextProps);
+        });
     }
 
     change = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
