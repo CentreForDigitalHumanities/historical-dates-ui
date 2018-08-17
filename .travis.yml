@@ -1,0 +1,10 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - "node"
+  - "8"
+  - "7"
+  - "lts/*"
+cache:
+  directories: node_modules

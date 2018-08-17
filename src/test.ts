@@ -1,7 +1,7 @@
-import ExampleComponent from './'
+import { DateAnnotatorComponent } from './'
 
-describe('ExampleComponent', () => {
-  it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
-  })
-})
+describe('DateAnnotatorComponent', () => {
+    it('is truthy', () => {
+        expect(DateAnnotatorComponent).toBeTruthy()
+    });
+});

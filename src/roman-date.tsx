@@ -35,34 +35,38 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
     }
 
     componentWillReceiveProps(nextProps: RomanDateProps) {
-        if (this.state.calendar != nextProps.calendar) {
-            nextProps = this.parseState(nextProps);
-            // if the calendar changes, the date needs to be recalculated
-            this.props.onChange(nextProps);
-        }
-        this.setState(Object.assign({}, this.state, nextProps));
+        this.setState((prevState, props) => {
+            nextProps = Object.assign({}, props, prevState, nextProps);
+            if (prevState.calendar != nextProps.calendar) {
+                nextProps = this.parseState(nextProps);
+            }
+            return nextProps;
+        });
     }
 
     change = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        let newState = Object.assign({}, this.state, { [event.target.name]: event.target.value });
-        this.props.onChange(this.parseState(newState));
+        let newValue = { [event.target.name]: event.target.value };
+        this.setState((prevState) => {
+            let newState = Object.assign({}, prevState, newValue);
+            return this.parseState(newState);
+        });
     }
 
     parseState(newState: RomanDateProps) {
         let romanDate = new RomanDate(newState.day, newState.text, newState.month, newState.year, newState.calendar);
         try {
             let date = romanDate.toDate();
-            console.log(date);
             newState = Object.assign({}, newState, { date, valid: true });
         } catch (error) {
-            console.log(error);
             if (error instanceof InvalidDateException) {
                 newState = Object.assign({}, newState, { valid: false });
             } else {
                 throw error;
             }
         }
-
+        if (newState.valid) {
+            newState.onChange(newState);
+        }
         return newState;
     }
 
@@ -71,12 +75,16 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
             day,
             text,
             month,
-            year
+            year,
+            valid
         } = this.state;
+        const selectClassName = valid ? "select" : "select is-danger",
+            inputClassName = valid ? "input" : "input is-danger";
+
         return (
             <div className="field has-addons">
                 <div className="control">
-                    <div className="select">
+                    <div className={selectClassName}>
                         <select name='day' value={day} onChange={this.change}>
                             {
                                 Object.keys(RomanDays).map(romanDay =>
@@ -86,7 +94,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
                     </div>
                 </div>
                 <div className="control">
-                    <div className="select">
+                    <div className={selectClassName}>
                         <select name='text' value={text} onChange={this.change}>
                             {
                                 Object.keys(RomanTexts).map(romanText =>
@@ -96,7 +104,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
                     </div>
                 </div>
                 <div className="control">
-                    <div className="select">
+                    <div className={selectClassName}>
                         <select name='month' value={month} onChange={this.change}>
                             {
                                 Object.keys(RomanMonths).map(romanMonth =>
@@ -106,7 +114,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
                     </div>
                 </div>
                 <div className="control">
-                    <input className="input" name='year' type="text" value={year} onChange={this.change} />
+                    <input className={inputClassName} name='year' type="text" value={year} onChange={this.change} />
                 </div>
             </div>
         )

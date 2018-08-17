@@ -1,6 +1,6 @@
 {
   "name": "historical-dates-ui",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "React UI components for historical-dates",
   "author": "UUDigitalHumanitieslab",
   "license": "ISC",
@@ -22,7 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "dependencies": {
-    "historical-dates": "0.0.3"
+    "historical-dates": "^0.1.0"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
