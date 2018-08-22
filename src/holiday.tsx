@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { calcEaster, HistoricalDate, InvalidDateException } from 'historical-dates';
+import { Calendar, calcEaster, HistoricalDate, InvalidDateException } from 'historical-dates';
 
 export type HolidayDay = 'easter' | 'septuagesima' | 'ashWednesday' | 'ascensionDay' | 'pentecost' | 'trinitySunday' | 'corpusChristi' | 'adventSunday';
 export type HolidayProps = {
     onChange: (value: HolidayProps) => void,
     day: HolidayDay,
     year: number | string,
-    calendar: 'gregorian' | 'julian',
+    calendar: Calendar,
     valid?: boolean,
     readonly date?: HistoricalDate
 }

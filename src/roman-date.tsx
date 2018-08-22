@@ -1,5 +1,6 @@
 import * as React from 'react'
 import {
+    Calendar,
     InvalidDateException,
     HistoricalDate,
     RomanDate,
@@ -13,7 +14,7 @@ import {
 
 export type RomanDateProps = {
     onChange: (value: RomanDateProps) => void,
-    calendar: 'gregorian' | 'julian',
+    calendar: Calendar,
     day: RomanDay,
     text: RomanText,
     month: RomanMonth,

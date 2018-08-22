@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createDate, RomanDay, RomanText, RomanMonth, RomanDate, InvalidDateException, HistoricalDate } from 'historical-dates';
+import { Calendar, createDate, RomanDay, RomanText, RomanMonth, RomanDate, InvalidDateException, HistoricalDate } from 'historical-dates';
 
 import { PlainDate } from './date';
 import { Holiday, HolidayDay } from './holiday';
@@ -11,7 +11,7 @@ export type DateAnnotatorProps = {
 }
 
 export type DateAnnotatorState = {
-    calendar: 'gregorian' | 'julian';
+    calendar: Calendar;
     text: string,
     type: undefined | 'plain' | 'holiday' | 'roman',
     date: HistoricalDate,
@@ -130,6 +130,9 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
                     if (!(exception instanceof InvalidDateException)) {
                         throw exception;
                     }
+
+                    // The text couldn't be converted to a Roman date,
+                    // so it probably isn't. Nothing to do here.
                 }
             }
 
