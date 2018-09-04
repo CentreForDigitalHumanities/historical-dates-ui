@@ -5,8 +5,23 @@ import { PlainDate } from './date';
 import { Holiday, HolidayDay } from './holiday';
 import { RomanDateComponent } from './roman-date';
 
+/**
+ * Only changes in text and onChange are handled after the component
+ * has been created!
+ */
 export type DateAnnotatorProps = {
+    calendar: Calendar;
     text: string,
+    type: undefined | 'plain' | 'holiday' | 'roman',
+    date: HistoricalDate,
+    holiday: HolidayDay,
+    roman: {
+        day: RomanDay,
+        text: RomanText,
+        month: RomanMonth,
+        year: string,
+    },
+    offsetDays: number,
     onChange: (value: DateAnnotatorProps) => void
 }
 
@@ -28,27 +43,34 @@ export type DateAnnotatorState = {
 }
 
 export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, DateAnnotatorState> {
-    static defaultProps = {
-        onChange: function () { }
+    static get defaultProps() {
+        let today = new Date();
+        let date = createDate(today.getFullYear(), today.getMonth() + 1, today.getDate(), 'gregorian');
+        let romanDate = RomanDate.fromDate(date);
+
+        return {
+            calendar: 'gregorian',
+            date: date as HistoricalDate,
+            holiday: 'easter',
+            roman: romanDate,
+            offsetDays: 0,
+            onChange: function () { }
+        }
     }
 
     constructor(props: DateAnnotatorProps) {
         super(props);
-        let date = new Date();
-        let historicalDate = createDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-
-        let roman = RomanDate.fromDate(historicalDate);
 
         this.state = {
-            calendar: 'gregorian',
-            date: historicalDate,
+            calendar: props.calendar,
+            date: props.date,
             text: props.text,
-            type: undefined,
-            offsetDays: 0,
-            holiday: 'easter',
-            roman: roman,
-            gregorianDate: historicalDate.toGregorian(),
-            julianDate: historicalDate.toJulian()
+            type: props.type,
+            offsetDays: props.offsetDays,
+            holiday: props.holiday,
+            roman: props.roman,
+            gregorianDate: props.date.toGregorian(),
+            julianDate: props.date.toJulian()
         };
     }
 
@@ -117,11 +139,15 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
     }
 
     componentWillReceiveProps(nextProps: DateAnnotatorProps) {
+        let liveProps = {
+            text: nextProps.text,
+            onChange: nextProps.onChange
+        }
         this.setState((prevState) => {
-            if (prevState.text != nextProps.text) {
+            if (prevState.text != liveProps.text) {
                 try {
-                    let roman = RomanDate.fromString(nextProps.text, this.state.calendar);
-                    nextProps = Object.assign({}, nextProps, {
+                    let roman = RomanDate.fromString(liveProps.text, this.state.calendar);
+                    liveProps = Object.assign({}, liveProps, {
                         roman,
                         date: roman.toDate(),
                         type: 'roman'
@@ -136,7 +162,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
                 }
             }
 
-            return this.deriveState(prevState, nextProps);
+            return this.deriveState(prevState, liveProps);
         });
     }
 
