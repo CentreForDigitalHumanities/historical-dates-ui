@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Calendar, calcEaster, HistoricalDate, InvalidDateException } from 'historical-dates';
+import { createDate, Calendar, calcEaster, HistoricalDate, InvalidDateException, fromRomanNumber } from 'historical-dates';
 
-export type HolidayDay = 'easter' | 'septuagesima' | 'ashWednesday' | 'ascensionDay' | 'pentecost' | 'trinitySunday' | 'corpusChristi' | 'adventSunday';
+export type HolidayDay = 'easter' | 'septuagesima' | 'ashWednesday' | 'ascensionDay' | 'pentecost' | 'trinitySunday' | 'corpusChristi' | 'adventSunday' | 'unknown';
 export type HolidayProps = {
     onChange: (value: HolidayProps) => void,
     day: HolidayDay,
@@ -67,6 +67,10 @@ export class Holiday extends React.Component<HolidayProps, HolidayProps> {
                     date = calcEaster(year, newState.calendar).sunday;
                     break;
 
+                case 'unknown':
+                    date = createDate(/^[0-9]+$/.test(year) ? parseInt(year) : fromRomanNumber(year), 1, 1, newState.calendar);
+                    break;
+
                 default:
                     date = calcEaster(year, newState.calendar)[newState.day];
                     break;
@@ -105,6 +109,7 @@ export class Holiday extends React.Component<HolidayProps, HolidayProps> {
                             <option value="trinitySunday">Trinity Sunday</option>
                             <option value="corpusChristi">Corpus Christi</option>
                             <option value="adventSunday">Advent Sunday</option>
+                            <option value="unknown">Unknown</option>
                         </select>
                     </div>
                 </div>

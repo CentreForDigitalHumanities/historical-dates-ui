@@ -36,7 +36,7 @@ export default {
             include: ['node_modules/historical-dates/dist/historical-dates.js'],
             namedExports: {
                 'node_modules/historical-dates/dist/historical-dates.js':
-                    ['calcEaster', 'createDate', 'InvalidDateException', 'HistoricalDate', 'RomanDate', 'RomanDays', 'RomanTexts', 'RomanMonths']
+                    ['calcEaster', 'createDate', 'fromRomanNumber', 'InvalidDateException', 'HistoricalDate', 'RomanDate', 'RomanDays', 'RomanTexts', 'RomanMonths']
             }
         })
     ]

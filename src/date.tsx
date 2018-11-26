@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createDate, InvalidDateException } from 'historical-dates';
+import { RomanNumber, RomanNumberState } from './roman-number';
 
 export type DateProps = {
     onChange: (value: DateProps) => void,
@@ -7,6 +8,7 @@ export type DateProps = {
     day: number,
     month: number,
     year: number,
+    yearText: string,
     valid?: boolean
 }
 
@@ -52,6 +54,23 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
         });
     }
 
+    changeYear = (year: RomanNumberState) => {
+        this.setState((prevState, props) => {
+            let newState = this.parseState(
+                Object.assign({},
+                    prevState,
+                    {
+                        year: year.numeric,
+                        yearText: year.text,
+                        valid: year.valid
+                    }));
+            if (newState.valid) {
+                props.onChange(newState);
+            }
+            return newState;
+        });
+    }
+
     parseState(newState: DateProps) {
         try {
             let date = createDate(newState.year, newState.month, newState.day, newState.calendar);
@@ -69,7 +88,7 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
         const {
             day,
             month,
-            year,
+            yearText,
             valid
         } = this.state;
         const selectClassName = valid ? "select" : "select is-danger",
@@ -97,7 +116,7 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
                     </div>
                 </div>
                 <div className="control">
-                    <input className={inputClassName} name='year' type="number" value={year} onChange={this.change} />
+                    <RomanNumber className={inputClassName} value={yearText} onChange={this.changeYear} />
                 </div>
             </div>
         )
