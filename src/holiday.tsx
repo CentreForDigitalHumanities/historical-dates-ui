@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { createDate, Calendar, calcEaster, HistoricalDate, InvalidDateException, fromRomanNumber } from 'historical-dates';
+import { createDate, Calendar, calcEaster, HistoricalDate, InvalidDateException } from 'historical-dates';
+import { RomanNumber, RomanNumberState } from './roman-number';
 
 export type HolidayDay = 'easter' | 'septuagesima' | 'ashWednesday' | 'ascensionDay' | 'pentecost' | 'trinitySunday' | 'corpusChristi' | 'adventSunday' | 'unknown';
 export type HolidayProps = {
@@ -27,10 +28,16 @@ export class Holiday extends React.Component<HolidayProps, HolidayProps> {
     componentWillReceiveProps(nextProps: HolidayProps) {
         this.setState((prevState, props) => {
             nextProps = Object.assign({}, props, prevState, nextProps);
+            let yearValue: number;
             if (prevState.calendar != nextProps.calendar) {
-                nextProps = this.parseState(nextProps, props);
+                let parsed = this.parseState(nextProps, props);
+                yearValue = parsed.yearValue;
+                nextProps = parsed.newState;
+            } else {
+                yearValue = RomanNumber.parseRomanNumber(nextProps.year).value;
             }
-            if (!/^\d+$/.test(prevState.year.toString())) {
+
+            if (RomanNumber.parseRomanNumber(prevState.year).value === yearValue) {
                 nextProps.year = prevState.year;
             }
             return nextProps;
@@ -42,52 +49,53 @@ export class Holiday extends React.Component<HolidayProps, HolidayProps> {
 
         this.setState((prevState, props) => {
             let newState = Object.assign({}, props, prevState, newProps);
-            return this.parseState(newState, props);
+            return this.parseState(newState, props).newState;
         });
     }
 
-    parseState(newState: HolidayProps, props: HolidayProps) {
+    changeYear(state: RomanNumberState) {
+        this.setState((prevState, props) => {
+            let newState = Object.assign({}, props, prevState, { year: state.text, valid: state.type !== 'invalid' });
+            let vars = this.parseState(newState, props, state.type !== 'invalid').newState;
+            return vars;
+        });
+    }
+
+    parseState(newState: HolidayProps, props: HolidayProps, validYear = true) {
         let date: HistoricalDate;
 
-        let year = newState.year.toString();
-        if (/^[0-9]+$/.test(year)) {
-            if (year == '0') {
-                // Default is 0 but this also happens when the user clears
-                // the input, to allow them to input a Roman date make the
-                // input empty.
-                year = '';
+        const year = newState.year.toString();
+        const yearValue = RomanNumber.parseRomanNumber(year).value;
+        if (validYear) {
+            try {
+                switch (newState.day) {
+                    case 'easter':
+                        date = calcEaster(yearValue, newState.calendar).sunday;
+                        break;
+
+                    case 'unknown':
+                        date = createDate(yearValue, 1, 1, newState.calendar);
+                        break;
+
+                    default:
+                        date = calcEaster(yearValue, newState.calendar)[newState.day];
+                        break;
+                }
             }
-        } else {
-            year = year.replace(/[^MDCLXVI]/gi, '').toUpperCase();
+            catch (error) {
+                if (error instanceof InvalidDateException) {
+                    newState.valid = false;
+                    return { newState, yearValue };
+                } else {
+                    throw error;
+                }
+            }
+
+            newState = Object.assign(newState, { year, date, valid: validYear });
+            props.onChange(newState);
         }
 
-        try {
-            switch (newState.day) {
-                case 'easter':
-                    date = calcEaster(year, newState.calendar).sunday;
-                    break;
-
-                case 'unknown':
-                    date = createDate(/^[0-9]+$/.test(year) ? parseInt(year) : fromRomanNumber(year), 1, 1, newState.calendar);
-                    break;
-
-                default:
-                    date = calcEaster(year, newState.calendar)[newState.day];
-                    break;
-            }
-        }
-        catch (error) {
-            if (error instanceof InvalidDateException) {
-                newState.valid = false;
-                return newState;
-            } else {
-                throw error;
-            }
-        }
-
-        newState = Object.assign(newState, { year, date, valid: true });
-        props.onChange(newState);
-        return newState;
+        return { newState, yearValue };
     }
 
     render() {
@@ -114,7 +122,10 @@ export class Holiday extends React.Component<HolidayProps, HolidayProps> {
                     </div>
                 </div>
                 <div className="control">
-                    <input className={valid ? "input" : "input is-danger"} placeholder="year" name='year' type="text" value={year} onChange={this.change} />
+                    <RomanNumber className={valid ? "input" : "input is-danger"}
+                        placeholder="year"
+                        value={year}
+                        onChange={this.changeYear.bind(this)} />
                 </div>
             </div>
         )

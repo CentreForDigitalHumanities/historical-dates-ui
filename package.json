@@ -22,7 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "dependencies": {
-    "historical-dates": "^0.1.2"
+    "historical-dates": "^0.1.4"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",

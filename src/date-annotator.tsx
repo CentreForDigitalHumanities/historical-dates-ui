@@ -83,17 +83,20 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
             offsetDays: prevState.offsetDays
         }, nextProps);
         nextState.offsetDays = parseInt(nextState.offsetDays || '0');
+        let newState: any;
         // work-around for low date ranges not being support
-        let offsetDate = nextState.date.year > 1000
-            ? nextState.date.addDays(nextState.offsetDays)
-            : nextState.date;
-        let newState = Object.assign({}, nextState, {
-            gregorianDate: offsetDate.toGregorian(),
-            julianDate: offsetDate.toJulian()
-        });
-        if (!prevState.gregorianDate.equals(newState.gregorianDate) ||
-            prevState.calendar != newState.calendar) {
-            this.emitState(Object.assign(prevState, newState));
+        if (nextState.date.year > 1000) {
+            let offsetDate = nextState.date.addDays(nextState.offsetDays);
+            newState = Object.assign({}, nextState, {
+                gregorianDate: offsetDate.toGregorian(),
+                julianDate: offsetDate.toJulian()
+            });
+            if (!prevState.gregorianDate.equals(newState.gregorianDate) ||
+                prevState.calendar != newState.calendar) {
+                this.emitState(Object.assign(prevState, newState));
+            }
+        } else {
+            newState = Object.assign({}, nextState);
         }
         // make sure the updated value is displayed
         newState.offsetDays = newState.offsetDays.toString()
@@ -168,9 +171,10 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         });
     }
 
-    change = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    change = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, clearOffsetDays = false) => {
         this.setDerivedState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
+            ...(clearOffsetDays ? { offsetDays: 0 } : {})
         });
     }
 
@@ -187,7 +191,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
             yearText
         } = this.state;
         let editor;
-        const displayCalendar = calendar == 'unknown' ? 'gregorian' : 'julian';
+        const displayCalendar = calendar != 'julian' ? 'gregorian' : 'julian';
         switch (type) {
             case 'plain':
                 editor = <PlainDate onChange={(data) => {
@@ -222,13 +226,16 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
 
         let offsetDaysField: string | JSX.Element = '',
             offsetDateDisplay: string | JSX.Element = '';
+
         if (type) {
-            offsetDaysField = (<div className="field">
-                <label className="label">Offset Days</label>
-                <div className="control">
-                    <input className="input" type="number" placeholder="0" name="offsetDays" value={offsetDays} onChange={this.change} />
-                </div>
-            </div>);
+            if (type === 'holiday') {
+                offsetDaysField = (<div className="field">
+                    <label className="label">Offset Days</label>
+                    <div className="control">
+                        <input className="input" type="number" placeholder="0" name="offsetDays" value={offsetDays} onChange={this.change} />
+                    </div>
+                </div>);
+            }
             offsetDateDisplay = <div className="columns">
                 <div className="column">
                     <div className="field">
@@ -271,7 +278,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
                 <div className="field">
                     <div className="control">
                         <label className="radio">
-                            <input type="radio" name="type" onChange={this.change} value="plain" checked={type == 'plain'} />
+                            <input type="radio" name="type" onChange={e => this.change(e, true)} value="plain" checked={type == 'plain'} />
                             Plain date
                         </label>
                         <label className="radio">
@@ -279,8 +286,12 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
                             Holiday
                         </label>
                         <label className="radio">
-                            <input type="radio" name="type" onChange={this.change} value="roman" checked={type == 'roman'} />
+                            <input type="radio" name="type" onChange={e => this.change(e, true)} value="roman" checked={type == 'roman'} />
                             Roman date
+                        </label>
+                        <label className="radio">
+                            <input type="radio" name="type" onChange={e => this.change(e, true)} value={undefined} checked={!type} />
+                            Other/Unknown
                         </label>
                     </div>
                 </div>

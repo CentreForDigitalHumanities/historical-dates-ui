@@ -59,11 +59,14 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
             let newState = this.parseState(
                 Object.assign({},
                     prevState,
-                    {
-                        year: year.numeric,
-                        yearText: year.text,
-                        valid: year.valid
-                    }));
+                    year.type !== 'invalid' ?
+                        {
+                            year: year.value,
+                            yearText: year.text,
+                            valid: true
+                        } : {
+                            valid: false
+                        }));
             if (newState.valid) {
                 props.onChange(newState);
             }

@@ -9,8 +9,7 @@ import pkg from './package.json'
 
 export default {
     input: 'src/index.tsx',
-    output: [
-        {
+    output: [{
             file: pkg.main,
             format: 'cjs',
             sourcemap: true
@@ -35,8 +34,7 @@ export default {
         commonjs({
             include: ['node_modules/historical-dates/dist/historical-dates.js'],
             namedExports: {
-                'node_modules/historical-dates/dist/historical-dates.js':
-                    ['calcEaster', 'createDate', 'fromRomanNumber', 'InvalidDateException', 'HistoricalDate', 'RomanDate', 'RomanDays', 'RomanTexts', 'RomanMonths']
+                'node_modules/historical-dates/dist/historical-dates.js': ['calcEaster', 'createDate', 'fromRomanNumber', 'toRomanNumber', 'InvalidDateException', 'HistoricalDate', 'RomanDate', 'RomanDays', 'RomanTexts', 'RomanMonths']
             }
         })
     ]

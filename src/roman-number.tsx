@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { fromRomanNumber, InvalidDateException } from 'historical-dates';
+import { fromRomanNumber, toRomanNumber, InvalidDateException } from 'historical-dates';
 
 type RomanNumberProps = {
     className: string,
+    placeholder?: string,
     value: string | number,
     onChange: (state: RomanNumberState) => void
 }
 
 export type RomanNumberState = {
+    type: 'roman' | 'arabic' | 'invalid',
     text: string,
-    valid: boolean,
-    numeric: number
+    value: number
 }
 
 export class RomanNumber extends React.Component<RomanNumberProps, RomanNumberState> {
@@ -22,55 +23,82 @@ export class RomanNumber extends React.Component<RomanNumberProps, RomanNumberSt
 
     constructor(props: RomanNumberProps) {
         super(props);
-        this.state = this.deriveState(props.value);
-    }
-
-    componentWillMount() {
-        // bind keyup (arrows up/down)
+        this.state = RomanNumber.parseRomanNumber(props.value);
     }
 
     componentWillReceiveProps(nextProps: RomanNumberProps) {
         this.setState(() => {
-            return this.deriveState(nextProps.value);
+            return RomanNumber.parseRomanNumber(nextProps.value);
         });
     }
 
-    componentWillUnmount() {
-        // unbind keyup
-    }
-
     render() {
-        const className = `${this.props.className} ${this.state.valid ? "input" : "input is-danger"}`.trimLeft();
+        const className = `${this.props.className} ${this.state.type !== 'invalid' ? "input" : "input is-danger"}`.trimLeft();
         const value = this.state.text;
         return (
-            <input className={className} type="text" value={value} onChange={this.change.bind(this)} />
+            <input spellCheck={false}
+                className={className}
+                type="text"
+                value={value}
+                placeholder={this.props.placeholder}
+                onKeyDown={this.keydown.bind(this)}
+                onChange={this.change.bind(this)} />
         )
     }
 
-    private change(event: React.ChangeEvent<HTMLInputElement>) {
-        this.props.onChange(this.deriveState(event.target.value));
-    }
+    private keydown(event: React.KeyboardEvent<HTMLInputElement>) {
+        switch (event.keyCode) {
+            // down
+            case 40:
+                this.shiftNumber(true);
+                break;
 
-    private deriveState(value: string | number): RomanNumberState {
-        let converted = this.parseRomanNumber(value);
-        return {
-            text: value.toString(),
-            numeric: converted != undefined ? converted : 0,
-            valid: converted != undefined
+            // up
+            case 38:
+                this.shiftNumber(false);
+                break;
         }
     }
 
-    private parseRomanNumber(value: string | number): number | undefined {
-        let cleaned = `${value}`.toUpperCase().replace(/[^0-9MDCLXVI\.]/g, '');
-        if (/[0-9\.]/.test(cleaned)) {
+    private change(event: React.ChangeEvent<HTMLInputElement>) {
+        this.props.onChange(RomanNumber.parseRomanNumber(event.target.value));
+    }
+
+    private shiftNumber(increase: boolean) {
+        this.setState((prevState) => {
+            if (prevState.type === 'invalid') {
+                return {} as any;
+            }
+            const parsed = RomanNumber.parseRomanNumber(prevState.text);
+            if (parsed.type === 'invalid') {
+                return {} as any;
+            }
+
+            const newValue = parsed.value + (increase ? 1 : -1);
+            const vals = {
+                text: parsed.type === 'roman'
+                    ? toRomanNumber(newValue)
+                    : newValue.toString(),
+                numeric: newValue
+            };
+
+            this.props.onChange(RomanNumber.parseRomanNumber(vals.text));
+
+            return vals;
+        });
+    }
+
+    static parseRomanNumber(text: string | number): RomanNumberState {
+        let cleaned = `${text}`.toUpperCase().replace(/[\. ]/g, '').trim();
+        if (/^[0-9]+$/.test(cleaned)) {
             // plain number
-            return parseInt(cleaned);
+            return { type: 'arabic', text: text.toString(), value: parseInt(cleaned) };
         }
         try {
-            return fromRomanNumber(cleaned);
+            return { type: 'roman', text: text.toString(), value: fromRomanNumber(cleaned) };
         } catch (error) {
             if (error instanceof InvalidDateException) {
-                return undefined;
+                return { type: 'invalid', text: text.toString(), value: 0 };
             } else {
                 throw error;
             }

@@ -9,8 +9,10 @@ import {
     RomanText,
     RomanTexts,
     RomanMonth,
-    RomanMonths
+    RomanMonths,
+    toRomanNumber
 } from 'historical-dates';
+import { RomanNumber, RomanNumberState } from './roman-number';
 
 export type RomanDateProps = {
     onChange: (value: RomanDateProps) => void,
@@ -19,6 +21,7 @@ export type RomanDateProps = {
     text: RomanText,
     month: RomanMonth,
     year: string,
+    yearType?: RomanNumberState['type'],
     date?: HistoricalDate,
     valid?: boolean
 }
@@ -53,11 +56,22 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
         });
     }
 
-    parseState(newState: RomanDateProps) {
-        let romanDate = new RomanDate(newState.day, newState.text, newState.month, newState.year, newState.calendar);
+    changeYear(state: RomanNumberState) {
+        this.setState((prevState) => {
+            let newState = Object.assign({}, prevState, { year: state.text, yearType: state.type });
+            return this.parseState(newState, state.type !== 'invalid');
+        });
+    }
+
+    parseState(newState: RomanDateProps, validYear = true) {
         try {
+            const year = newState.yearType && newState.yearType === 'arabic'
+                ? toRomanNumber(parseInt(newState.year))
+                : newState.year;
+
+            let romanDate = new RomanDate(newState.day, newState.text, newState.month, year, newState.calendar);
             let date = romanDate.toDate();
-            newState = Object.assign({}, newState, { date, valid: true });
+            newState = Object.assign({}, newState, { date, valid: true && validYear });
         } catch (error) {
             if (error instanceof InvalidDateException) {
                 newState = Object.assign({}, newState, { valid: false });
@@ -115,7 +129,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
                     </div>
                 </div>
                 <div className="control">
-                    <input className={inputClassName} name='year' type="text" value={year} onChange={this.change} />
+                    <RomanNumber className={inputClassName} value={year} onChange={this.changeYear.bind(this)} />
                 </div>
             </div>
         )
