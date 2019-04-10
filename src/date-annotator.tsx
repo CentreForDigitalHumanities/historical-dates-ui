@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Calendar, createDate, RomanDay, RomanText, RomanMonth, RomanDate, InvalidDateException, HistoricalDate } from 'historical-dates';
+import { Calendar, createDate, createDateFromString, RomanDay, RomanText, RomanMonth, RomanDate, InvalidDateException, HistoricalDate } from 'historical-dates';
 
 import { PlainDate } from './date';
 import { Holiday, HolidayDay } from './holiday';
@@ -150,20 +150,40 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         }
         this.setState((prevState) => {
             if (prevState.text != liveProps.text) {
+                let foundDate = false;
                 try {
-                    let roman = RomanDate.fromString(liveProps.text, this.state.calendar == 'unknown' ? 'gregorian' : this.state.calendar);
+                    let date = createDateFromString(liveProps.text, 'gregorian');
                     liveProps = Object.assign({}, liveProps, {
-                        roman,
-                        date: roman.toDate(),
-                        type: 'roman'
+                        date,
+                        yearText: date.year.toString(),
+                        type: 'plain'
                     });
+                    foundDate = true;
                 } catch (exception) {
                     if (!(exception instanceof InvalidDateException)) {
                         throw exception;
                     }
 
-                    // The text couldn't be converted to a Roman date,
-                    // so it probably isn't. Nothing to do here.
+                    // The text couldn't be converted to a date,
+                    // maybe it's a Roman date?
+                }
+
+                if (!foundDate) {
+                    try {
+                        let roman = RomanDate.fromString(liveProps.text, this.state.calendar == 'unknown' ? 'gregorian' : this.state.calendar);
+                        liveProps = Object.assign({}, liveProps, {
+                            roman,
+                            date: roman.toDate(),
+                            type: 'roman'
+                        });
+                    } catch (exception) {
+                        if (!(exception instanceof InvalidDateException)) {
+                            throw exception;
+                        }
+
+                        // The text couldn't be converted to a Roman date,
+                        // so it probably isn't. Nothing to do here.
+                    }
                 }
             }
 

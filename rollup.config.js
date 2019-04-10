@@ -34,7 +34,7 @@ export default {
         commonjs({
             include: ['node_modules/historical-dates/dist/historical-dates.js'],
             namedExports: {
-                'node_modules/historical-dates/dist/historical-dates.js': ['calcEaster', 'createDate', 'fromRomanNumber', 'toRomanNumber', 'InvalidDateException', 'HistoricalDate', 'RomanDate', 'RomanDays', 'RomanTexts', 'RomanMonths']
+                'node_modules/historical-dates/dist/historical-dates.js': ['calcEaster', 'createDate', 'createDateFromString', 'fromRomanNumber', 'toRomanNumber', 'InvalidDateException', 'HistoricalDate', 'RomanDate', 'RomanDays', 'RomanTexts', 'RomanMonths']
             }
         })
     ]
