@@ -33,7 +33,7 @@ export default class App extends Component {
                             <label className="label">Transcribed Date</label>
                             <input className="input" type="text" value={this.state.text} onChange={this.changeText} />
                         </div>
-                        <DateAnnotatorComponent text={this.state.text} onChange={this.displayState} />
+                        <DateAnnotatorComponent text={this.state.text} type={this.state.data.type} onChange={this.displayState} />
                     </div>
                 </div>
                 <br />

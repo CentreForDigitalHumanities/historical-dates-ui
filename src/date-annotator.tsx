@@ -84,20 +84,22 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         }, nextProps);
         nextState.offsetDays = parseInt(nextState.offsetDays || '0');
         let newState: any;
-        // work-around for low date ranges not being support
+        // work-around for low date ranges not being supported
         if (nextState.date.year > 1000) {
             let offsetDate = nextState.date.addDays(nextState.offsetDays);
             newState = Object.assign({}, nextState, {
                 gregorianDate: offsetDate.toGregorian(),
                 julianDate: offsetDate.toJulian()
             });
-            if (!prevState.gregorianDate.equals(newState.gregorianDate) ||
-                prevState.calendar != newState.calendar) {
+            if (prevState.type != newState.type ||
+                prevState.calendar != newState.calendar ||
+                !prevState.gregorianDate.equals(newState.gregorianDate)) {
                 this.emitState(Object.assign(prevState, newState));
             }
         } else {
             newState = Object.assign({}, nextState);
         }
+
         // make sure the updated value is displayed
         newState.offsetDays = newState.offsetDays.toString()
         return newState;
@@ -146,10 +148,11 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
     componentWillReceiveProps(nextProps: DateAnnotatorProps) {
         let liveProps = {
             text: nextProps.text,
+            type: nextProps.type,
             onChange: nextProps.onChange
         }
         this.setState((prevState) => {
-            if (prevState.text != liveProps.text) {
+            if (prevState.text != liveProps.text && liveProps.text) {
                 let foundDate = false;
                 try {
                     let date = createDateFromString(liveProps.text, 'gregorian');
