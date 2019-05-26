@@ -29,7 +29,7 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
 
     componentWillReceiveProps(nextProps: DateProps) {
         this.setState((prevState, props) => {
-            if (prevState.calendar != nextProps.calendar) {
+            if (prevState.calendar !== nextProps.calendar) {
                 nextProps = this.parseState(nextProps);
                 // if the calendar changes, the date needs to be recalculated
                 props.onChange(nextProps);

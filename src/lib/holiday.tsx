@@ -29,7 +29,7 @@ export class Holiday extends React.Component<HolidayProps, HolidayProps> {
         this.setState((prevState, props) => {
             nextProps = Object.assign({}, props, prevState, nextProps);
             let yearValue: number;
-            if (prevState.calendar != nextProps.calendar) {
+            if (prevState.calendar !== nextProps.calendar) {
                 let parsed = this.parseState(nextProps, props);
                 yearValue = parsed.yearValue;
                 nextProps = parsed.newState;

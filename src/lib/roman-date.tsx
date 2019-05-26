@@ -41,7 +41,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
     componentWillReceiveProps(nextProps: RomanDateProps) {
         this.setState((prevState, props) => {
             nextProps = Object.assign({}, props, prevState, nextProps);
-            if (prevState.calendar != nextProps.calendar) {
+            if (prevState.calendar !== nextProps.calendar) {
                 nextProps = this.parseState(nextProps);
             }
             return nextProps;

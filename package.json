@@ -1,56 +1,64 @@
 {
-  "name": "historical-dates-ui",
-  "version": "0.0.6",
-  "description": "React UI components for historical-dates",
-  "author": "UUDigitalHumanitieslab",
-  "license": "ISC",
-  "repository": "UUDigitalHumanitieslab/historical-dates-ui",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.es.js",
-  "engines": {
-    "node": ">=8",
-    "npm": ">=5"
-  },
-  "scripts": {
-    "test": "cross-env CI=1 react-scripts-ts test --env=jsdom",
-    "test:watch": "react-scripts-ts test --env=jsdom",
-    "build": "rollup -c",
-    "start": "rollup -c -w",
-    "prepare": "npm run build",
-    "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build"
-  },
-  "dependencies": {
-    "historical-dates": "^0.1.8"
-  },
-  "peerDependencies": {
-    "prop-types": "^15.5.4",
-    "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^23.1.5",
-    "@types/react": "^16.3.13",
-    "@types/react-dom": "^16.0.5",
-    "babel-core": "^6.26.3",
-    "babel-runtime": "^6.26.0",
-    "cross-env": "^5.1.4",
-    "gh-pages": "^1.2.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts-ts": "^2.16.0",
-    "rollup": "^0.62.0",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-commonjs": "^9.1.3",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-postcss-modules": "^1.0.8",
-    "rollup-plugin-typescript2": "^0.13.0",
-    "rollup-plugin-url": "^1.4.0",
-    "typescript": "^2.8.3"
-  },
-  "files": [
-    "dist"
-  ]
+    "name": "historical-dates-ui",
+    "version": "0.0.6",
+    "description": "React UI components for historical-dates",
+    "author": "UUDigitalHumanitieslab",
+    "license": "ISC",
+    "repository": "UUDigitalHumanitieslab/historical-dates-ui",
+    "main": "dist/index.js",
+    "engines": {
+        "node": ">=8",
+        "npm": ">=5"
+    },
+    "scripts": {
+        "test": "cross-env CI=1 react-scripts test --env=jsdom",
+        "test:watch": "react-scripts test --env=jsdom",
+        "ts:defs": "tsc --declaration --outDir . --emitDeclarationOnly --noEmit false --isolatedModules false --allowJs false",
+        "build": "react-scripts build",
+        "build:lib": "rimraf dist && cross-env NODE_ENV=production babel src/lib --extensions '.ts,.tsx' --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+        "start": "react-scripts start",
+        "prepare": "npm run build",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
+        "prepublishOnly": "npm run ts:defs",
+        "postpublish": "rimraf *.d.ts"
+    },
+    "dependencies": {
+        "historical-dates": "^0.1.8"
+    },
+    "peerDependencies": {
+        "prop-types": "^15.5.4",
+        "react": "^15.0.0 || ^16.0.0",
+        "react-dom": "^15.0.0 || ^16.0.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.4.4",
+        "@babel/core": "^7.4.5",
+        "@types/jest": "^23.1.5",
+        "@types/react": "^16.3.13",
+        "@types/react-dom": "^16.0.5",
+        "cross-env": "^5.1.4",
+        "eslint": "^5.16.0",
+        "gh-pages": "^1.2.0",
+        "react": "^16.4.1",
+        "react-dom": "^16.4.1",
+        "react-scripts": "3.0.1",
+        "rimraf": "^2.6.3",
+        "typescript": "^3.4.5"
+    },
+    "files": [
+        "dist"
+    ],
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
 }

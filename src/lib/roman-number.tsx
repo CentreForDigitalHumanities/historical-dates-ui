@@ -89,6 +89,8 @@ export class RomanNumber extends React.Component<RomanNumberProps, RomanNumberSt
     }
 
     static parseRomanNumber(text: string | number): RomanNumberState {
+        //  \. is correct
+        // eslint-disable-next-line
         let cleaned = `${text}`.toUpperCase().replace(/[\. ]/g, '').trim();
         if (/^[0-9]+$/.test(cleaned)) {
             // plain number

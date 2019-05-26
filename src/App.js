@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { DateAnnotatorComponent } from 'historical-dates-ui'
+import { DateAnnotatorComponent } from './lib'
 
 export default class App extends Component {
     constructor(props) {
