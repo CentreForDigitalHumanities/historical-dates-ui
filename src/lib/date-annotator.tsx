@@ -50,8 +50,8 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         let romanDate = RomanDate.fromDate(date);
 
         return {
-            calendar: 'gregorian',
-            date: date as HistoricalDate,
+            calendar: 'unknown',
+            date,
             holiday: 'easter',
             roman: romanDate,
             offsetDays: 0,
