@@ -112,7 +112,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
                     <div className={selectClassName}>
                         <select name='text' value={text} onChange={this.change}>
                             {
-                                Object.keys(RomanTexts).map(romanText =>
+                                ['', ...Object.keys(RomanTexts)].map(romanText =>
                                     <option key={romanText} value={romanText}>{romanText}</option>)
                             }
                         </select>
@@ -122,7 +122,7 @@ export class RomanDateComponent extends React.Component<RomanDateProps, RomanDat
                     <div className={selectClassName}>
                         <select name='month' value={month} onChange={this.change}>
                             {
-                                Object.keys(RomanMonths).map(romanMonth =>
+                                ['', ...Object.keys(RomanMonths)].map(romanMonth =>
                                     <option key={romanMonth} value={romanMonth}>{romanMonth}</option>)
                             }
                         </select>

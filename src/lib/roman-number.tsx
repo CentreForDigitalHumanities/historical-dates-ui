@@ -76,7 +76,7 @@ export class RomanNumber extends React.Component<RomanNumberProps, RomanNumberSt
 
             const newValue = parsed.value + (increase ? 1 : -1);
             const vals = {
-                text: parsed.type === 'roman'
+                text: parsed.type === 'roman' && newValue >= 0
                     ? toRomanNumber(newValue)
                     : newValue.toString(),
                 numeric: newValue
@@ -92,12 +92,12 @@ export class RomanNumber extends React.Component<RomanNumberProps, RomanNumberSt
         //  \. is correct
         // eslint-disable-next-line
         let cleaned = `${text}`.toUpperCase().replace(/[\. ]/g, '').trim();
-        if (/^[0-9]+$/.test(cleaned)) {
+        if (/^-?[0-9]+$/.test(cleaned)) {
             // plain number
             return { type: 'arabic', text: text.toString(), value: parseInt(cleaned) };
         }
         try {
-            return { type: 'roman', text: text.toString(), value: fromRomanNumber(cleaned) };
+            return { type: 'roman', text: (text || '').toString(), value: fromRomanNumber(cleaned) || 0 };
         } catch (error) {
             if (error instanceof InvalidDateException) {
                 return { type: 'invalid', text: text.toString(), value: 0 };

@@ -5,9 +5,9 @@ import { RomanNumber, RomanNumberState } from './roman-number';
 export type DateProps = {
     onChange: (value: DateProps) => void,
     calendar: 'gregorian' | 'julian',
-    day: number,
-    month: number,
-    year: number,
+    day: number | undefined,
+    month: number | undefined,
+    year: number | undefined,
     yearText: string,
     valid?: boolean
 }
@@ -103,7 +103,7 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
                         <select name='day' value={day} onChange={this.change}>
                             {
                                 this.days().map(dateDay =>
-                                    <option key={dateDay} value={dateDay}>{dateDay}</option>)
+                                    <option key={dateDay || 0} value={dateDay}>{dateDay === undefined ? '' : `${dateDay}`}</option>)
                             }
                         </select>
                     </div>
@@ -112,8 +112,8 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
                     <div className={selectClassName}>
                         <select name='month' value={month} onChange={this.change}>
                             {
-                                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((dateMonth, index) =>
-                                    <option key={index} value={index + 1}>{dateMonth}</option>)
+                                ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((dateMonth, index) =>
+                                    <option key={index} value={index === 0 ? undefined : index}>{dateMonth}</option>)
                             }
                         </select>
                     </div>
@@ -126,7 +126,7 @@ export class PlainDate extends React.Component<DateProps, DateProps> {
     }
 
     days() {
-        let days = [];
+        let days: (number | undefined)[] = [undefined];
         for (let day = 1; day < 32; day++) {
             days.push(day);
         }

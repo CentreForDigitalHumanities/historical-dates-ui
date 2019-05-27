@@ -45,8 +45,7 @@ export type DateAnnotatorState = {
 
 export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, DateAnnotatorState> {
     static get defaultProps() {
-        let today = new Date();
-        let date = createDate(today.getFullYear(), today.getMonth() + 1, today.getDate(), 'gregorian');
+        let date = createDate(undefined, undefined, undefined, 'gregorian');
         let romanDate = RomanDate.fromDate(date);
 
         return {
@@ -72,7 +71,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
             roman: props.roman,
             gregorianDate: props.date.toGregorian(),
             julianDate: props.date.toJulian(),
-            yearText: props.date.year.toString()
+            yearText: (props.date.year || '').toString()
         };
     }
 
@@ -84,20 +83,15 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
         }, nextProps);
         nextState.offsetDays = parseInt(nextState.offsetDays || '0');
         let newState: any;
-        // work-around for low date ranges not being supported
-        if (nextState.date.year > 1000) {
-            let offsetDate = nextState.date.addDays(nextState.offsetDays);
-            newState = Object.assign({}, nextState, {
-                gregorianDate: offsetDate.toGregorian(),
-                julianDate: offsetDate.toJulian()
-            });
-            if (prevState.type !== newState.type ||
-                prevState.calendar !== newState.calendar ||
-                !prevState.gregorianDate.equals(newState.gregorianDate)) {
-                this.emitState(Object.assign(prevState, newState));
-            }
-        } else {
-            newState = Object.assign({}, nextState);
+        let offsetDate = nextState.date.addDays(nextState.offsetDays);
+        newState = Object.assign({}, nextState, {
+            gregorianDate: offsetDate.toGregorian(),
+            julianDate: offsetDate.toJulian()
+        });
+        if (prevState.type !== newState.type ||
+            prevState.calendar !== newState.calendar ||
+            !prevState.gregorianDate.equals(newState.gregorianDate)) {
+            this.emitState(Object.assign(prevState, newState));
         }
 
         // make sure the updated value is displayed
@@ -158,7 +152,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
                     let date = createDateFromString(liveProps.text, 'gregorian');
                     liveProps = Object.assign({}, liveProps, {
                         date,
-                        yearText: date.year.toString(),
+                        yearText: (date.year || '').toString(),
                         type: 'plain'
                     });
                     foundDate = true;
@@ -232,7 +226,7 @@ export class DateAnnotatorComponent extends React.Component<DateAnnotatorProps, 
                 }}
                     calendar={displayCalendar}
                     day={holiday}
-                    year={date.year} />;
+                    year={date.year || ''} />;
                 break;
             case 'roman':
                 editor = <RomanDateComponent
