@@ -1,65 +1,65 @@
 {
-    "name": "historical-dates-ui",
-    "homepage": "https://UUDigitalHumanitieslab.github.io/historical-dates-ui",
-    "version": "0.1.1",
-    "description": "React UI components for historical-dates",
-    "author": "UUDigitalHumanitieslab",
-    "license": "ISC",
-    "repository": "UUDigitalHumanitieslab/historical-dates-ui",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "engines": {
-        "node": ">=6",
-        "npm": ">=5"
-    },
-    "scripts": {
-        "test": "cross-env CI=1 react-scripts test --env=jsdom",
-        "test:watch": "react-scripts test --env=jsdom",
-        "ts:defs": "tsc --declaration --outDir dist --emitDeclarationOnly --noEmit false --isolatedModules false --allowJs false",
-        "build": "react-scripts build",
-        "build:lib": "rimraf dist && cross-env NODE_ENV=production babel src/lib --extensions '.ts,.tsx' --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__ && npm run ts:defs",
-        "start": "react-scripts start",
-        "prepare": "npm run build",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d build",
-        "prepublishOnly": "npm run build:lib"
-    },
-    "dependencies": {
-        "historical-dates": "^0.2.0"
-    },
-    "peerDependencies": {
-        "prop-types": "^15.5.4",
-        "react": "^15.0.0 || ^16.0.0",
-        "react-dom": "^15.0.0 || ^16.0.0"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.4.4",
-        "@babel/core": "^7.4.5",
-        "@types/jest": "^23.1.5",
-        "@types/react": "^16.3.13",
-        "@types/react-dom": "^16.0.5",
-        "cross-env": "^5.1.4",
-        "eslint": "^5.16.0",
-        "gh-pages": "^1.2.0",
-        "react": "^16.4.1",
-        "react-dom": "^16.4.1",
-        "react-scripts": "3.0.1",
-        "rimraf": "^2.6.3",
-        "typescript": "^3.4.5"
-    },
-    "files": [
-        "dist"
+  "name": "historical-dates-ui",
+  "homepage": "https://UUDigitalHumanitieslab.github.io/historical-dates-ui",
+  "version": "0.1.2",
+  "description": "React UI components for historical-dates",
+  "author": "UUDigitalHumanitieslab",
+  "license": "ISC",
+  "repository": "UUDigitalHumanitieslab/historical-dates-ui",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=6",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "test": "cross-env CI=1 react-scripts test --env=jsdom",
+    "test:watch": "react-scripts test --env=jsdom",
+    "ts:defs": "tsc --declaration --outDir dist --emitDeclarationOnly --noEmit false --isolatedModules false --allowJs false",
+    "build": "react-scripts build",
+    "build:lib": "rimraf dist && cross-env NODE_ENV=production babel src/lib --extensions '.ts,.tsx' --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__ && npm run ts:defs",
+    "start": "react-scripts start",
+    "prepare": "npm run build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "prepublishOnly": "npm run build:lib"
+  },
+  "dependencies": {
+    "historical-dates": "^0.2.0"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.5.4",
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@types/jest": "^23.1.5",
+    "@types/react": "^16.3.13",
+    "@types/react-dom": "^16.0.5",
+    "cross-env": "^5.1.4",
+    "eslint": "^5.16.0",
+    "gh-pages": "^1.2.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "3.0.1",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.4.5"
+  },
+  "files": [
+    "dist"
+  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    }
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
