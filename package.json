@@ -7,6 +7,7 @@
     "license": "ISC",
     "repository": "UUDigitalHumanitieslab/historical-dates-ui",
     "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "engines": {
         "node": ">=8",
         "npm": ">=5"
@@ -14,15 +15,14 @@
     "scripts": {
         "test": "cross-env CI=1 react-scripts test --env=jsdom",
         "test:watch": "react-scripts test --env=jsdom",
-        "ts:defs": "tsc --declaration --outDir . --emitDeclarationOnly --noEmit false --isolatedModules false --allowJs false",
+        "ts:defs": "tsc --declaration --outDir dist --emitDeclarationOnly --noEmit false --isolatedModules false --allowJs false",
         "build": "react-scripts build",
-        "build:lib": "rimraf dist && cross-env NODE_ENV=production babel src/lib --extensions '.ts,.tsx' --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+        "build:lib": "rimraf dist && cross-env NODE_ENV=production babel src/lib --extensions '.ts,.tsx' --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__ && npm run ts:defs",
         "start": "react-scripts start",
         "prepare": "npm run build",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d build",
-        "prepublishOnly": "npm run ts:defs",
-        "postpublish": "rimraf *.d.ts"
+        "prepublishOnly": "npm run build:lib"
     },
     "dependencies": {
         "historical-dates": "^0.2.0"
