@@ -1,3 +1,6 @@
+import 'react-app-polyfill/ie11';
+import 'string.prototype.trimleft';
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 
