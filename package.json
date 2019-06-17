@@ -25,7 +25,9 @@
     "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
-    "historical-dates": "^0.2.0"
+    "historical-dates": "^0.2.0",
+    "react-app-polyfill": "^1.0.1",
+    "string.prototype.trimleft": "^2.0.0"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
@@ -42,11 +44,9 @@
     "eslint": "^5.16.0",
     "gh-pages": "^1.2.0",
     "react": "^16.4.1",
-    "react-app-polyfill": "^1.0.1",
     "react-dom": "^16.4.1",
     "react-scripts": "3.0.1",
     "rimraf": "^2.6.3",
-    "string.prototype.trimleft": "^2.0.0",
     "typescript": "^3.4.5"
   },
   "files": [
