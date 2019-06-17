@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a97180425e3384b35aae9bf6a8caccaf",
+    "revision": "1353879adadf0dc1b0b5676e97024069",
     "url": "/historical-dates-ui/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/historical-dates-ui/static/css/main.a2b7b0b6.chunk.css"
   },
   {
-    "revision": "dd57c041877ec2461f6a",
-    "url": "/historical-dates-ui/static/js/2.b9ed864d.chunk.js"
+    "revision": "2214dbb31f4f291b7784",
+    "url": "/historical-dates-ui/static/js/2.476b1366.chunk.js"
   },
   {
     "revision": "6809c82b525343653bb9",
