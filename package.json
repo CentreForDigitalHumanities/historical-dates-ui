@@ -25,6 +25,7 @@
     "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
+    "core-js": "^3.1.4",
     "historical-dates": "^0.2.0",
     "react-app-polyfill": "^1.0.1",
     "string.prototype.trimleft": "^2.0.0"
