@@ -1,5 +1,6 @@
 # historical-dates-ui
 
+[![DOI](https://zenodo.org/badge/144034950.svg)](https://zenodo.org/badge/latestdoi/144034950)
 [![NPM](https://img.shields.io/npm/v/historical-dates-ui.svg)](https://www.npmjs.com/package/historical-dates-ui) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 React UI components for entering [historical-dates](https://github.com/UUDigitalHumanitieslab/historical-dates).
