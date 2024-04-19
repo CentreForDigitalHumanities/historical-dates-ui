@@ -1,0 +1,29 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Historical Dates UI
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Sheean
+    family-names: Spoel
+    email: s.j.j.spoel@uu.nl
+    orcid: 'https://orcid.org/0000-0002-6802-4135'
+    affiliation: Utrecht University Centre for Digital Humanities
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.7493005
+repository-code: >-
+  https://github.com/UUDigitalHumanitieslab/historical-dates-ui
+abstract: React UI components for entering historical dates.
+keywords:
+  - historical dates
+  - UI components
+  - React
+license: BSD-3-Clause
+commit: c6a8808
+version: 0.1.7
+date-released: '2022-12-29'
