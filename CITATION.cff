@@ -17,7 +17,7 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.7493005
 repository-code: >-
-  https://github.com/UUDigitalHumanitieslab/historical-dates-ui
+  https://github.com/CentreForDigitalHumanities/historical-dates-ui
 abstract: React UI components for entering historical dates.
 keywords:
   - historical dates

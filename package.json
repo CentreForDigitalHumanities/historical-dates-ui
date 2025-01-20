@@ -1,11 +1,11 @@
 {
   "name": "historical-dates-ui",
-  "homepage": "https://UUDigitalHumanitieslab.github.io/historical-dates-ui",
+  "homepage": "https://CentreForDigitalHumanities.github.io/historical-dates-ui",
   "version": "0.1.7",
   "description": "React UI components for historical-dates",
-  "author": "UUDigitalHumanitieslab",
+  "author": "UU Centre for Digital Humanities - Research Software Lab",
   "license": "ISC",
-  "repository": "UUDigitalHumanitieslab/historical-dates-ui",
+  "repository": "CentreForDigitalHumanities/historical-dates-ui",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {

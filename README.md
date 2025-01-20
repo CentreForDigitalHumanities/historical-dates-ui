@@ -1,14 +1,14 @@
 # historical-dates-ui
 
 [![DOI](https://zenodo.org/badge/144034950.svg)](https://zenodo.org/badge/latestdoi/144034950)
-[![NPM](https://img.shields.io/npm/v/historical-dates-ui.svg)](https://www.npmjs.com/package/historical-dates-ui) 
+[![NPM](https://img.shields.io/npm/v/historical-dates-ui.svg)](https://www.npmjs.com/package/historical-dates-ui)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 React UI components for entering [historical-dates](https://github.com/UUDigitalHumanitieslab/historical-dates).
 
 ## Live example
 
-[Try the component!](https://UUDigitalHumanitieslab.github.io/historical-dates-ui)
+[Try the component!](https://CentreForDigitalHumanities.github.io/historical-dates-ui)
 
 ## Install
 
@@ -42,4 +42,4 @@ If you wish to cite this repository, please use the metadata provided in the [CI
 
 ## Contact
 
-For questions, small feature suggestions, and bug reports, feel free to [create an issue](https://github.com/UUDigitalHumanitieslab/historical-dates-ui/issues/new). If you do not have a Github account, you can also [contact the Centre for Digital Humanities](https://cdh.uu.nl/contact/).
+For questions, small feature suggestions, and bug reports, feel free to [create an issue](https://github.com/CentreForDigitalHumanities/historical-dates-ui/issues/new). If you do not have a Github account, you can also [contact the Centre for Digital Humanities](https://cdh.uu.nl/contact/).
